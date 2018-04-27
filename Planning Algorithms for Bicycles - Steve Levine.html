@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)http://web.mit.edu/sjlevine/www/projects/bicycle-planning/ -->
+<html lang="en" class=" js "><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<title>Planning Algorithms for Bicycles - Steve Levine</title>
+<meta name="description" content="For my final project for 6.832 (Underactuated Robotics), I decided to apply various random sampling-based motion planning algorithms to some different planar models of bicycle dynamics. I used RRT, RG-RRT (Reachability-guided RRT), and LQR-RRT* to plan paths for the Dubin’s vehicle (3-dimensional state space), non-slipping bicycle (4-dimensional), and a slipping bicycle (7-dimensional) with a “skidding” model.">
+<meta name="author" content="Steve Levine">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Steve Levine">
+<meta property="og:title" content="Planning Algorithms for Bicycles">
+<link rel="canonical" href="http://web.mit.edu/sjlevine/www/projects/bicycle-planning/">
+<meta property="og:url" content="http://web.mit.edu/sjlevine/www/projects/bicycle-planning/">
+<meta property="og:description" content="For my final project for 6.832 (Underactuated Robotics), I decided to apply various random sampling-based motion planning algorithms to some different planar models of bicycle dynamics. I used RRT, RG-RRT (Reachability-guided RRT), and LQR-RRT* to plan paths for the Dubin’s vehicle (3-dimensional state space), non-slipping bicycle (4-dimensional), and a slipping bicycle (7-dimensional) with a “skidding” model.">
+<meta property="og:image" content="http://web.mit.edu/sjlevine/www/project_data/bicycle-planning/BicyclePlanningTop.jpg">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2012-05-01T08:00:00-04:00">
+<script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Steve Levine",
+      "url" : "http://web.mit.edu/sjlevine/www",
+      "sameAs" : null
+    }
+  </script>
+
+<link href="http://web.mit.edu/sjlevine/www/feed.xml" type="application/atom+xml" rel="alternate" title="Steve Levine Feed">
+
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<link rel="stylesheet" href="./Planning Algorithms for Bicycles - Steve Levine_files/main.css">
+<!--[if lte IE 9]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+<style id="fit-vids-style">.fluid-width-video-wrapper{width:100%;position:relative;padding:0;}.fluid-width-video-wrapper iframe,.fluid-width-video-wrapper object,.fluid-width-video-wrapper embed {position:absolute;top:0;left:0;width:100%;height:100%;}</style></head>
+<body class="layout--single" style="margin-bottom: 209.875px;">
+<!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+<div class="masthead">
+<div class="masthead__inner-wrap">
+<div class="masthead__menu">
+<nav id="site-nav" class="greedy-nav">
+<a class="site-title" href="http://web.mit.edu/sjlevine/www/">Steve Levine</a>
+<ul class="visible-links">
+<li class="masthead__menu-item"><a href="http://web.mit.edu/sjlevine/www/index.html" role="home">home</a></li>
+<li class="masthead__menu-item"><a href="http://web.mit.edu/sjlevine/www/projects/" role="projects">projects</a></li>
+<li class="masthead__menu-item"><a href="http://web.mit.edu/sjlevine/www/contact" role="contact">contact</a></li>
+</ul>
+<button type="button" count="0" class="hidden">
+<span class="visually-hidden">Toggle Menu</span>
+<div class="navicon"></div>
+</button>
+<ul class="hidden-links hidden"></ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="page__hero" style=" ">
+<img src="./Planning Algorithms for Bicycles - Steve Levine_files/BicyclePlanningTop.jpg" alt="Planning Algorithms for Bicycles" class="page__hero-image">
+</div>
+<div id="main" role="main">
+<div class="sidebar sticky">
+<div itemscope="" itemtype="http://schema.org/Person">
+<div class="author__avatar">
+<img src="./Planning Algorithms for Bicycles - Steve Levine_files/steve-1.jpg" class="author__avatar" alt="Steve Levine" itemprop="image">
+</div>
+<div class="author__content">
+<h3 class="author__name" itemprop="name">Steve Levine</h3>
+<p class="author__bio" itemprop="description">
+</p>
+</div>
+<div class="author__urls-wrapper">
+<button class="btn btn--inverse">Follow</button>
+<ul class="author__urls social-icons">
+<li itemprop="homeLocation" itemscope="" itemtype="http://schema.org/Place">
+<i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <span itemprop="name">Cambridge, MA</span>
+</li>
+<li>
+<a href="http://web.mit.edu/sjlevine/www/" itemprop="url">
+<i class="fa fa-fw fa-chain" aria-hidden="true"></i> Website
+</a>
+</li>
+<li>
+<a href="https://github.com/sjlevine" itemprop="sameAs">
+<i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
+</a>
+</li>
+
+</ul>
+</div>
+</div>
+</div>
+<article class="page" itemscope="" itemtype="http://schema.org/CreativeWork">
+<meta itemprop="headline" content="Planning Algorithms for Bicycles">
+<meta itemprop="description" content="For my final project for 6.832 (Underactuated Robotics), I decided to apply various random sampling-based motion planning algorithms to some different planar models of bicycle dynamics. I used RRT, RG-RRT (Reachability-guided RRT), and LQR-RRT* to plan paths for the Dubin’s vehicle (3-dimensional state space), non-slipping bicycle (4-dimensional), and a slipping bicycle (7-dimensional) with a “skidding” model.">
+<meta itemprop="datePublished" content="May 01, 2012">
+<div class="page__inner-wrap">
+<header>
+<h1 class="page__title" itemprop="headline">Planning Algorithms for Bicycles
+</h1>
+</header>
+<section class="page__content" itemprop="text">
+
+<figure style="width: 350px;" class="align-left">
+<a href="./Planning Algorithms for Bicycles - Steve Levine_files/bicycle-solution.png" class="image-popup">
+<img src="./Planning Algorithms for Bicycles - Steve Levine_files/bicycle-solution.png">
+</a>
+<figcaption>Example solution to the bicycle planning problem.</figcaption>
+</figure>
+
+<p>As you may have already surmised from checking out parts of my website, I really like bicycles! So, for my final project in 6.832 (Underactuated Robotics, taught by Prof. Russ Tedrake), I decided to apply some of the techniques we’ve been learning about to different simplified planar models of bicycle dynamics. Specifically, I used the following randomized sampling motion-planning algorithms: (RRT, RG-RRT, and LQR-RRT*. RRT and RRT* have been used successfully for a variety of motion planning tasks, and tend to work great for holonomic systems. However, for systems with more complicated dynamics or systems with differential constraints, RRT tends to expand its tree inefficiently due to inaccurate distance and extension metrics. The performance of RRT* is also very sensitive to these metrics. LQR-RRT* attempts to ameliorate these difficulties by linearizing points in the RRT and constructing locally optimal LQR controllers to use for the distance and extension heuristics. As the tree gets bigger and more densely covers state space, these approximations become more and more accurate.</p>
+<h2 id="bicycle-models">Bicycle Models</h2>
+<figure style="width: 350px;" class="align-right">
+<a href="./Planning Algorithms for Bicycles - Steve Levine_files/dubins-3d.jpg" class="image-popup">
+<img src="./Planning Algorithms for Bicycles - Steve Levine_files/dubins-3d.jpg">
+</a>
+<figcaption>Dubin's model 3D configuration space.</figcaption>
+</figure>
+<p>I looked primarily at three different bicycle models, increasing in complexity. The first is the Dubin’s vehicle, which has a three-dimensional state space. This vehicle is modeled as a point that moves with constant velocity and whose angle can be steered via a control input. Since the vehicle cannot instananeously move laterally, this is a simple model for a bicycle. Planning output from an RRT planning for this Dubin’s model is shown in the picture at right, where the axes represent x, y, and theta. The red blocks are obstacles that must be manuevered about, and the green box is the goal region.</p>
+<p>After the Dubin’s model, I looked at a slightly more complicated version with a four dimensional state space. This model allowed the bicycle to accelerate and decelerate (no more constant velocity requirements), as well as had a more realistic steering control. The wheels are modeled as having “directional friction” - infinite laterally parallel to the axis, and 0 going forward and backward. Put another way, there is a differential constraint that the bicycle wheels cannot slip laterally.</p>
+<p>Finally, the most complicated planar model I examined was a slipping bicycle that had a seven-dimensional state space. Please see the details in my paper, but this bicycle modeled the planar physics accurately, and also allowed the wheels to skid. A good analogy for this is a bicycle riding on sand. The top image shows a solution for this bicycle, as does the video below.</p>
+<h2 id="algorithms">Algorithms</h2>
+<figure style="width: 350px;" class="align-left">
+<a href="./Planning Algorithms for Bicycles - Steve Levine_files/lqr-rrt-nearest.jpg" class="image-popup">
+<img src="./Planning Algorithms for Bicycles - Steve Levine_files/lqr-rrt-nearest.jpg">
+</a>
+<figcaption>LQR-RRT* tree expansion.</figcaption>
+</figure>
+<p>I predominantly used RRT (Rapidly-exploring Random Tree), RG-RRT (reachability-guided RRT), and LQR-RRT* to plan for these bicycle models. RRT works well for many holonomic systems, but often has trouble for systems with dynamics. RG-RRT and LQR-RRT* attempt to solve this difficulty using two different approaches.</p>
+<p>RG-RRT works by restricting the expansion of the tree into only yet-unexplored areas of state space. Any sample that is too close to the existing tree is rejected. In this way, the tree is kept small and is restricted to expand in new directions, even if there is not a very good distance or extension metric being used. RG-RRT implements this by augmenting a normal RRT with Reachable nodes, which represent the extrema of control inputs applied to the current states. By comparing the distances of randomly sampled notes to these Reachable nodes and to the normal nodes in the tree, it is possible to reject samples that don’t really do much new exploring.</p>
+<p>LQR-RRT* takes a completely different approach. Instead of forcefully rejecting samples, LQR-RRT* attempts to improve the distance and extension heuristics so that they work better for dynamical systems. Namely, these heuristics are approximated by locally optimal linearizations of the state space about nodes in the tree using an LQR controller. An intermediate screenshot of this is shown in the picture at right.</p>
+<figure style="width: 350px;" class="align-right">
+<a href="./Planning Algorithms for Bicycles - Steve Levine_files/lqr-rrt-star.jpg" class="image-popup">
+<img src="./Planning Algorithms for Bicycles - Steve Levine_files/lqr-rrt-star.jpg">
+</a>
+<figcaption>LQR-RRT* tree expansion.</figcaption>
+</figure>
+<p>Interestingly, I found that LQR was not applicable to a number of my bicycle models. It turns out that my Dubin’s model had a linearization that was not controllable, and the seven-dimensional state space model for the slipping bicycle exhibited this same phenomena in certain conditions (namely, when there was no lateral force on the tires). Therefore, applying LQR-RRT* to these models was difficult. I was able to apply it to the inverted pendulum (which is, admittedly, not a bicycle!). The results for this are shown at right.</p>
+<h2 id="paper">Paper</h2>
+<p>For more information, please see my final paper.</p>
+<p><a href="http://web.mit.edu/sjlevine/www/project_data/bicycle-planning/sjlevine_final_report.pdf"><img src="./Planning Algorithms for Bicycles - Steve Levine_files/paper.png" alt="paper_thumbnail"></a></p>
+<h2 id="video">Video</h2>
+<p>Here’s a video of RG-RRT planning for the bicycle model, and the resulting solution:</p>
+<div class="fluid-width-video-wrapper" style="padding-top: 50%;"><iframe src="./Planning Algorithms for Bicycles - Steve Levine_files/BZ94cCWIcCg.html" frameborder="0" allowfullscreen="" id="fitvid0"></iframe></div>
+</section>
+<footer class="page__meta">
+<p class="page__taxonomy">
+<strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+<span itemprop="keywords">
+<a href="http://web.mit.edu/sjlevine/www/categories/#bicycles" class="page__taxonomy-item" rel="tag">bicycles</a><span class="sep">, </span>
+<a href="http://web.mit.edu/sjlevine/www/categories/#classes" class="page__taxonomy-item" rel="tag">classes</a><span class="sep">, </span>
+<a href="http://web.mit.edu/sjlevine/www/categories/#robotics" class="page__taxonomy-item" rel="tag">robotics</a>
+</span>
+</p>
+<p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Updated:</strong> <time datetime="2012-05-01T08:00:00-04:00">May 01, 2012</time></p>
+</footer>
+<nav class="pagination">
+<a href="http://web.mit.edu/sjlevine/www/projects/blicycle/" class="pagination--pager" title="Blicycle - a bicycle for the blind
+">Previous</a>
+<a href="http://web.mit.edu/sjlevine/www/projects/MEng/" class="pagination--pager" title="M.Eng - Monitoring Robotic Plan Execution
+">Next</a>
+</nav>
+</div>
+</article>
+</div>
+<div class="page__footer">
+<footer>
+
+
+<div class="page__footer-follow">
+<ul class="social-icons">
+<li><strong>Follow:</strong></li>
+<li><a href="http://github.com/sjlevine"><i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+<li><a href="http://web.mit.edu/sjlevine/www/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+</ul>
+</div>
+<div class="page__footer-copyright">© 2017 Steve Levine. Powered by <a href="http://jekyllrb.com/" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a> theme (with some modifications from Steve!).</div>
+</footer>
+</div>
+<script src="./Planning Algorithms for Bicycles - Steve Levine_files/main.min.js.下载"></script>
+
+</body></html>
